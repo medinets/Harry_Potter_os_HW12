@@ -1,32 +1,34 @@
-from title_films import films_titles
-from award_films import films_awards
-import pprint
+from data_films import films_data
+from genres import ganres
+import json
 import os
-import string
-awards_with_titles = {}
-for i in range(len(films_awards)):
-    awards = []
-    title = films_awards[i]['results'][0]['movie']['title'].replace(':' , '') #(◑‿◐)
-    for award in films_awards[i]['results']:
-        award_dict = {'type': award['type'], 'award_name': award['award_name'], 'award': award['award']}
-        awards.append(award_dict)
-    awards = sorted(awards, key=lambda x: x['award_name'])
-    awards_with_titles.update({f'{title}': awards})
+import csv
 
-
-os.mkdir('Harry Potter')
-os.chdir('Harry Potter')
-for i in range(len(films_titles['results'])):
-    title = films_titles['results'][i]['title'].replace(':' , '') #(◑‿◐)
-    os.mkdir(f'{title}')
-    os.chdir(f'{title}')
-    for letter in string.ascii_uppercase:
-        os.mkdir(f'{letter}')
-        os.chdir(f'{letter}')
-        for titled_awards in awards_with_titles[f'{title}']:
-            if titled_awards['award_name'][0] == letter:
-                award_title = titled_awards['award_name']
-                with open(f'{award_title}.txt', 'a', encoding='utf-8') as file:
-                    file.write(titled_awards['award']+'\n')
-        os.chdir('..')
+ganres = json.loads(ganres)
+for i in range(len(ganres['results'])):
+    genre = ganres['results'][i]['genre']
+    os.mkdir(f'{genre}')
+    os.chdir(f'{genre}')
+    with open(f'{genre}', 'w', newline='') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=['title', 'year', 'rating', 'type', 'genres'])
+        writer.writeheader()
     os.chdir('..')
+
+for i in range(len(films_data)):
+    for genre in films_data[i]['gen']:
+        genre_dir = genre['genre']
+        os.chdir(f'{genre_dir}')
+        with open(f'{genre_dir}', 'a', newline='', encoding='utf-8') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=['title', 'year', 'rating', 'type', 'genres'])
+            title = films_data[i]["title"]
+            year = films_data[i]["year"]
+            rating = films_data[i]["rating"]
+            type1 = films_data[i]["type"]
+            genres = []
+            for genre_1 in films_data[i]['gen']:
+                genres.append(genre_1['genre'])
+            genres_res = ";".join(genres)
+            row_data = {'title': title, 'year': year, 'rating': rating, 'type': type1, 'genres': genres_res}
+            writer.writerow(row_data)
+        os.chdir('..')
+
