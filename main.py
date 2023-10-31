@@ -9,7 +9,7 @@ for i in range(len(ganres['results'])):
     genre = ganres['results'][i]['genre']
     os.mkdir(f'{genre}')
     os.chdir(f'{genre}')
-    with open(f'{genre}', 'w', newline='') as csv_file:
+    with open(f'{genre}.csv', 'w', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=['title', 'year', 'rating', 'type', 'genres'])
         writer.writeheader()
     os.chdir('..')
@@ -18,7 +18,7 @@ for i in range(len(films_data)):
     for genre in films_data[i]['gen']:
         genre_dir = genre['genre']
         os.chdir(f'{genre_dir}')
-        with open(f'{genre_dir}', 'a', newline='', encoding='utf-8') as csv_file:
+        with open(f'{genre_dir}.csv', 'a', newline='', encoding='utf-8') as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=['title', 'year', 'rating', 'type', 'genres'])
             title = films_data[i]["title"]
             year = films_data[i]["year"]
