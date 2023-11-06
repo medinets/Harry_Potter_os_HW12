@@ -1,34 +1,28 @@
-from data_films import films_data
-from genres import ganres
-import json
+from video_manager.media_player import Player
+from video_manager.films_worker import Film
 import os
-import csv
+import string
 
-ganres = json.loads(ganres)
-for i in range(len(ganres['results'])):
-    genre = ganres['results'][i]['genre']
-    os.mkdir(f'{genre}')
-    os.chdir(f'{genre}')
-    with open(f'{genre}.csv', 'w', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=['title', 'year', 'rating', 'type', 'genres'])
-        writer.writeheader()
-    os.chdir('..')
+player_1 = Player("rickroll", "https://youtu.be/dQw4w9WgXcQ?si=GWteDv_fY-dFScal", 213)
+print(player_1.play("https://youtu.be/dQw4w9WgXcQ?si=GWteDv_fY-dFScal"))
+print(player_1.playing)
+player_1.pause()
+#player_1.pause()
+print(player_1.playing)
 
-for i in range(len(films_data)):
-    for genre in films_data[i]['gen']:
-        genre_dir = genre['genre']
-        os.chdir(f'{genre_dir}')
-        with open(f'{genre_dir}.csv', 'a', newline='', encoding='utf-8') as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=['title', 'year', 'rating', 'type', 'genres'])
-            title = films_data[i]["title"]
-            year = films_data[i]["year"]
-            rating = films_data[i]["rating"]
-            type1 = films_data[i]["type"]
-            genres = []
-            for genre_1 in films_data[i]['gen']:
-                genres.append(genre_1['genre'])
-            genres_res = ";".join(genres)
-            row_data = {'title': title, 'year': year, 'rating': rating, 'type': type1, 'genres': genres_res}
-            writer.writerow(row_data)
-        os.chdir('..')
+print(player_1.quality)
+player_1.change_quality("4K")
+print(player_1.quality)
 
+print(os.getcwd())
+os.chdir("film_player")
+print(os.getcwd())
+os.mkdir("film_storage")
+os.chdir("film_storage")
+for letter in string.ascii_uppercase:
+        os.mkdir(f'{letter}')
+
+film_1 = Film("Drive", 2011)
+film_2 = Film("Cars: 2", 2011)
+print(film_1.get_film_address())
+print(film_2.get_film_address())
